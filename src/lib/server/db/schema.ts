@@ -1,4 +1,10 @@
-import { type PgTimestampConfig, pgEnum, snakeCase, timestamp } from "drizzle-orm/pg-core";
+import {
+	type PgTimestampConfig,
+	pgEnum,
+	primaryKey,
+	snakeCase,
+	timestamp,
+} from "drizzle-orm/pg-core";
 
 export const QualifierSeedingMethod = pgEnum("qualifier_seeding_method", [
 	"average_score",
@@ -57,3 +63,18 @@ export const Tournaments = snakeCase.table("tournament", (t) => ({
 	qualifierSeedingMethod: QualifierSeedingMethod(),
 	...timestampColumns(),
 }));
+
+export const TournamentAccess = snakeCase.table(
+	"tournament_access",
+	(t) => ({
+		tournamentId: t
+			.integer()
+			.notNull()
+			.references(() => Tournaments.id),
+		userId: t
+			.integer()
+			.notNull()
+			.references(() => Users.id),
+	}),
+	(t) => [primaryKey({ columns: [t.tournamentId, t.userId] })],
+);
