@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+# Ensure the hook runs from the repository root
+cd "$(dirname "$0")/.."
+
+echo "Linting..."
+bun run lint --staged --no-errors-on-unmatched
+
+echo "Pre-commit checks passed!"
